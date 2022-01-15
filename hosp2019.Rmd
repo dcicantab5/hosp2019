@@ -168,7 +168,7 @@ subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), sh
 #api_create(p, filename = "hosp2019_spec_n_per_1000_adm")
 ```
 # Specialist Excesses and Shortages
-```{r, fig.cap="Specialist Excesses and Shortages.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
