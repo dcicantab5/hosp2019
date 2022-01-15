@@ -1,0 +1,12 @@
+---
+title: "About this analysis"
+description: |
+  ***Source of data:*** 
+  <br> Manpower: OLM-YCK specialist database 
+  <br>Workload: KKM SMRP database
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+

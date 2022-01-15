@@ -1,0 +1,189 @@
+---
+title: "Hospitals Inpatient Workload 2019"
+
+author:
+  - name: Dr Saiful Safuan Md Sani 
+    url: https://saifulsafuan.com
+    affiliation: Clinical Research Centre & Department of Medicine Hospital Kuala Lumpur
+date: "`2022-01-11`"
+output: 
+  distill::distill_article:
+    self_contained: yes
+    toc: yes
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(distill)
+library(googlesheets)
+library(gsheet)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+#library(zoo) # moving averages
+#library(RcppRoll) # running total
+```
+```{r chartstudio, include=FALSE}
+Sys.setenv("plotly_username"="dcicantab5")
+Sys.setenv("plotly_api_key"="zY42xxH3ClQIvgjdFZlH")
+```
+
+```{r url, include=FALSE}
+url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+hosp2019 <- gsheet2tbl(url)
+hosp2019$type <- as.factor(hosp2019$type)
+hosp2019$type <- relevel(hosp2019$type, "state")
+
+rownames(hosp2019) <- hosp2019$hospital
+rownames(hosp2019)
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+hosp2019$hospital <- factor(hosp2019$hospital,
+                   levels = hosp2019$hospital)
+
+data <- arrange(hosp2019, desc(spec_n_per_1000_adm))
+```
+```{r, message=FALSE, echo=FALSE, warning=FALSE, include=FALSE}
+levels(hosp2019$hospital)
+```
+```{r, message=FALSE, echo=FALSE, warning=FALSE, include=FALSE}
+str(hosp2019)
+```
+# Admissions
+```{r, fig.cap="Admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+data <- arrange(hosp2019, admission)
+data$hospital <- factor(data$hospital,
+                   levels = data$hospital)
+
+p <- plot_ly(data, y = ~factor(hospital), x = ~admission, alpha = 0.97, size = 7)
+subplot(
+  add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Admissions <br><sup></sup>",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~data$hospital, tickfont = list(size = 10)),
+     xaxis = list(title = "Number of admissions")
+) %>% layout(legend = list(x = 0.77, y = 0.9)) %>% 
+ layout(annotations = 
+ list(x = 1, y = 0.51, text = "Two major hospitals has the workload of state hospitals,<br> two minor hospitals has the workload of major hospitals.", 
+      showarrow = F, xref='paper', yref='paper', 
+      xanchor='right', yanchor='auto', xshift=0, yshift=0,
+      font=list(size=12, color="grey"))
+ )
+
+
+#options(browser = 'false')
+#api_create(p, filename = "hosp2019_admission")
+```
+# Number of Specialists
+```{r, fig.cap="Number of specialists.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+data <- arrange(hosp2019, spec_n)
+data$hospital <- factor(data$hospital,
+                   levels = data$hospital)
+
+p <- plot_ly(data, y = ~factor(hospital), x = ~spec_n, alpha = 0.97, size = 13)
+subplot(
+  add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Specialists <br><sup></sup>",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~data$hospital, tickfont = list(size = 10)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.9)) %>% 
+ layout(annotations = 
+ list(x = 1, y = 0.51, text = "", 
+      showarrow = F, xref='paper', yref='paper', 
+      xanchor='right', yanchor='auto', xshift=0, yshift=0,
+      font=list(size=12, color="grey"))
+ )
+
+
+#options(browser = 'false')
+#api_create(p, filename = "hosp2019_spec_n")
+```
+# Standardised Workload
+```{r, fig.cap="Standardised Inpatient Workload.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
+states <- data %>% filter(type == 'state')
+states$hospital <- factor(states$hospital)
+#str(states)
+
+p_states <- plot_ly(states, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'Std. Workload', color = ~factor(type), colors = col3)
+p_states <- p_states %>% add_trace(states, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_states <- p_states %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_states
+
+major <- data %>% filter(type == 'major')
+major$hospital <- factor(major$hospital)
+#str(major)
+
+p_major <- plot_ly(major, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'Std. Workload', color = ~factor(type), colors = col3)
+p_major <- p_major %>% add_trace(major, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_major <- p_major %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_major
+
+minor <- data %>% filter(type == 'minor')
+minor$hospital <- factor(minor$hospital)
+#str(minor)
+
+p_minor <- plot_ly(minor, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'Std. Workload', color = ~factor(type), colors = col3)
+p_minor <- p_minor %>% add_trace(minor, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_minor <- p_minor %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_minor
+```
+
+```{r, fig.cap="Standardised Inpatient Workload.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), shareX = TRUE, shareY = TRUE) %>% 
+  layout(title = list(text = "Standardised Inpatient Workload by Type of Facility"))
+
+#options(browser = 'false')
+#api_create(p, filename = "hosp2019_spec_n_per_1000_adm")
+```
+# Specialist Excesses and Shortages
+```{r, fig.cap="Specialist Excesses and Shortages.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+data <- arrange(hosp2019, spec_adequacy)
+data$hospital <- factor(data$hospital,
+                   levels = data$hospital)
+
+p <- plot_ly(data, y = ~factor(hospital), x = ~spec_adequacy, alpha = 0.97, size = 13)
+subplot(
+  add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Specialist Excesses and Shortages",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~data$hospital, tickfont = list(size = 8)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.8))
+```
