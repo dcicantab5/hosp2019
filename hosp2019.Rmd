@@ -29,7 +29,32 @@ library(plotly)
 #Sys.setenv("plotly_api_key"="zY42xxH3ClQIvgjdFZlH")
 ```
 
+```{r urlshare, include=FALSE}
+#### SHARING GEN MED WORKLOAD ####
+#library(googlesheets4)
+# read_sheet(urlshare, "data_combo_sharegen") #alternative
+
+urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"
+  #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
+hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen") 
+```
+```{r, include=FALSE}
+hosp2019share$type <- as.factor(hosp2019share$type)
+hosp2019share$type <- relevel(hosp2019share$type, "state")
+
+rownames(hosp2019share) <- hosp2019share$hospital
+rownames(hosp2019share)
+
+#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+hosp2019share$hospital <- factor(hosp2019share$hospital,
+                   levels = hosp2019share$hospital)
+
+datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
+```
+
 ```{r url, include=FALSE}
+#### ALL IN ####
 url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
 # kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
 hosp2019 <- gsheet2tbl(url)
@@ -54,25 +79,25 @@ str(hosp2019)
 ```
 # Admissions
 ```{r, fig.cap="Admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
-
+#### shared workload
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
-data <- arrange(hosp2019, admission)
-data$hospital <- factor(data$hospital,
-                   levels = data$hospital)
+datashare_adm <- arrange(hosp2019share, admission)
+datashare_adm$hospital <- factor(datashare_adm$hospital,
+                   levels = datashare_adm$hospital)
 
-p <- plot_ly(data, y = ~factor(hospital), x = ~admission, alpha = 0.97, size = 7)
+p <- plot_ly(datashare_adm, y = ~factor(hospital), x = ~admission, alpha = 0.97, size = 7)
 subplot(
   add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
      title = "Admissions <br><sup></sup>",
      yaxis = list(title = "",
      categoryorder = "array",
-     categoryarray = ~data$hospital, tickfont = list(size = 10)),
+     categoryarray = ~datashare_adm$hospital, tickfont = list(size = 10)),
      xaxis = list(title = "Number of admissions")
 ) %>% layout(legend = list(x = 0.77, y = 0.9)) %>% 
  layout(annotations = 
- list(x = 1, y = 0.51, text = "Two major hospitals has the workload of state hospitals,<br> two minor hospitals has the workload of major hospitals.", 
+ list(x = 1, y = 0.51, text = "", 
       showarrow = F, xref='paper', yref='paper', 
       xanchor='right', yanchor='auto', xshift=0, yshift=0,
       font=list(size=12, color="grey"))
@@ -87,18 +112,18 @@ subplot(
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
-data <- arrange(hosp2019, spec_n)
-data$hospital <- factor(data$hospital,
-                   levels = data$hospital)
+datashare_spec <- arrange(hosp2019share, spec_sharegen)
+datashare_spec$hospital <- factor(datashare_spec$hospital,
+                   levels = datashare_spec$hospital)
 
-p <- plot_ly(data, y = ~factor(hospital), x = ~spec_n, alpha = 0.97, size = 13)
+p <- plot_ly(datashare_spec, y = ~factor(hospital), x = ~spec_sharegen, alpha = 0.97, size = 13)
 subplot(
   add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
      title = "Specialists <br><sup></sup>",
      yaxis = list(title = "",
      categoryorder = "array",
-     categoryarray = ~data$hospital, tickfont = list(size = 10)),
+     categoryarray = ~datashare_spec$hospital, tickfont = list(size = 10)),
      xaxis = list(title = "Number of specialists")
 ) %>% layout(legend = list(x = 0.77, y = 0.9)) %>% 
  layout(annotations = 
@@ -114,7 +139,7 @@ subplot(
 ```
 # Standardised Workload
 ```{r, fig.cap="Standardised Inpatient Workload.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
-states <- data %>% filter(type == 'state')
+states <- datashare %>% filter(type == 'state')
 states$hospital <- factor(states$hospital)
 #str(states)
 
@@ -129,7 +154,7 @@ p_states <- p_states %>% layout(xaxis = list(title = 'Number of specialists per 
 
 #p_states
 
-major <- data %>% filter(type == 'major')
+major <- datashare %>% filter(type == 'major')
 major$hospital <- factor(major$hospital)
 #str(major)
 
@@ -144,7 +169,7 @@ p_major <- p_major %>% layout(xaxis = list(title = 'Number of specialists per 10
 
 #p_major
 
-minor <- data %>% filter(type == 'minor')
+minor <- datashare %>% filter(type == 'minor')
 minor$hospital <- factor(minor$hospital)
 #str(minor)
 
@@ -167,7 +192,29 @@ subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), sh
 #options(browser = 'false')
 #api_create(p, filename = "hosp2019_spec_n_per_1000_adm")
 ```
-# Specialist Excesses and Shortages
+# Specialist Excesses and Shortages: 
+## *Shared General Medicine Workload*
+```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+datashare <- arrange(hosp2019share, spec_adequacy)
+datashare$hospital <- factor(datashare$hospital,
+                   levels = datashare$hospital)
+
+p <- plot_ly(datashare, y = ~factor(hospital), x = ~spec_adequacy, alpha = 0.97, size = 13)
+subplot(
+  add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Specialist Excesses and Shortages",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~datashare$hospital, tickfont = list(size = 8)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.8))
+```
+# Specialist Excesses and Shortages: 
+## *All In*
 ```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
@@ -187,5 +234,3 @@ subplot(
      xaxis = list(title = "Number of specialists")
 ) %>% layout(legend = list(x = 0.77, y = 0.8))
 ```
-
-

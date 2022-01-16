@@ -2,7 +2,7 @@
 title: "About this analysis"
 description: |
   ***Source of data:*** 
-  <br> Manpower: OLM-YCK specialist database (extracted 28 December 2021)
+  <br> Manpower: OLM-YCK specialist database (extracted 28 December 2021 - 16 January 2022)
   <br>Workload: KKM SMRP database 2019
 ---
 
@@ -26,10 +26,35 @@ rownames(hosp2019)
 
 hosp2019$hospital <- factor(hosp2019$hospital,
                    levels = hosp2019$hospital)
+
+
+# sharing gen med workload data
+urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"
+
+hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen") 
+
+hosp2019share$type <- as.factor(hosp2019share$type)
+hosp2019share$type <- relevel(hosp2019share$type, "state")
+
+rownames(hosp2019share) <- hosp2019share$hospital
+
+hosp2019share$hospital <- factor(hosp2019share$hospital,
+                   levels = hosp2019share$hospital)
+
+datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
 ```
 
 ```{r, results='asis', message=FALSE}
-knitr::kable(hosp2019[1:55,], caption = "Data table.", align = "c") %>% 
+knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical workload.", align = "c") %>% 
+  row_spec(1:14, color = "#150377") %>%
+  row_spec(15:40, color = "salmon") %>% 
+  row_spec(41:55, color = "grey")
+
+#pander(hosp2019, justify = "center")
+```
+
+```{r, results='asis', message=FALSE}
+knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
   row_spec(15:40, color = "salmon") %>% 
   row_spec(41:55, color = "grey")
