@@ -17,4 +17,13 @@ knitr::opts_chunk$set(echo = FALSE)
 # https://rstudio.github.io/distill/publish_website.html#github-pages
 
 ```
+***Workload dictates amount of manpower.***
 
+Varying manpower resources across hospitals.
+<br> Varying workload across hospitals.
+<br>
+<br> Because the number of admissions varies across hospitals, the workload is standardised to per 1000 admissions.
+<br>
+<br> **Provision of manpower resource per unit of workload = Number of specialists per 1000 admissions.**
+<br>
+<br> *e.g. HKL has a total of 129 specialists, for the given number of admissions in HKL (41993), it has 3.1 specialists handling every 1000 admissions.*

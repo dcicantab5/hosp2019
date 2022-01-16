@@ -25,8 +25,8 @@ library(plotly)
 #library(RcppRoll) # running total
 ```
 ```{r chartstudio, include=FALSE}
-Sys.setenv("plotly_username"="dcicantab5")
-Sys.setenv("plotly_api_key"="zY42xxH3ClQIvgjdFZlH")
+#Sys.setenv("plotly_username"="dcicantab5")
+#Sys.setenv("plotly_api_key"="zY42xxH3ClQIvgjdFZlH")
 ```
 
 ```{r url, include=FALSE}
@@ -187,3 +187,5 @@ subplot(
      xaxis = list(title = "Number of specialists")
 ) %>% layout(legend = list(x = 0.77, y = 0.8))
 ```
+
+

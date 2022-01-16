@@ -2,11 +2,37 @@
 title: "About this analysis"
 description: |
   ***Source of data:*** 
-  <br> Manpower: OLM-YCK specialist database 
-  <br>Workload: KKM SMRP database
+  <br> Manpower: OLM-YCK specialist database (extracted 28 December 2021)
+  <br>Workload: KKM SMRP database 2019
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(pander)
+library(distill)
+library(googlesheets)
+library(gsheet)
+library(dplyr)
+library(kableExtra)
+url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+hosp2019 <- gsheet2tbl(url)
+hosp2019$type <- as.factor(hosp2019$type)
+hosp2019$type <- relevel(hosp2019$type, "state")
+
+rownames(hosp2019) <- hosp2019$hospital
+rownames(hosp2019)
+
+hosp2019$hospital <- factor(hosp2019$hospital,
+                   levels = hosp2019$hospital)
 ```
 
+```{r, results='asis', message=FALSE}
+knitr::kable(hosp2019[1:55,], caption = "Data table.", align = "c") %>% 
+  row_spec(1:14, color = "#150377") %>%
+  row_spec(15:40, color = "salmon") %>% 
+  row_spec(41:55, color = "grey")
+
+#pander(hosp2019, justify = "center")
+```
