@@ -5,7 +5,11 @@ author:
   - name: Dr Saiful Safuan Md Sani 
     url: https://saifulsafuan.com
     affiliation: Clinical Research Centre & Department of Medicine Hospital Kuala Lumpur
-date: "`2022-01-11`"
+  - name: Dr Cheah Wee Kooi
+    affiliation: Clinical Research Centre & Department of Medicine Hospital Taiping
+  - name: Dr Yoon Chee Kin
+    affiliation: Clinical Research Centre & Department of Medicine Hospital Pulau Pinang
+date: "`2022-01-17`"
 output: 
   distill::distill_article:
     self_contained: yes
