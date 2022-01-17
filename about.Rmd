@@ -61,3 +61,41 @@ knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>%
 
 #pander(hosp2019, justify = "center")
 ```
+```{r urlgensub, include=FALSE}
+urlgensub <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=565087130"
+  #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
+gensub <- gsheet2tbl(urlgensub, "gen_subs") 
+```
+```{r, include=FALSE}
+gensub$type <- as.factor(gensub$type)
+gensub$type <- relevel(gensub$type, "state")
+
+rownames(gensub) <- gensub$hospital
+
+#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+gensub$hospital <- factor(gensub$hospital,
+                   levels = gensub$hospital)
+
+datagensub <- arrange(gensub, type, desc(Subs_prop))
+
+```
+
+```{r, results='asis', message=FALSE}
+knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General medicine & subspecialties staffing counts.", align = "c", font_size = 7) %>% 
+  row_spec(1:14, color = "#150377") %>%
+  row_spec(15:41, color = "salmon") %>% 
+  row_spec(42:59, color = "grey") %>% 
+  kableExtra::scroll_box(width = "100%")
+
+#pander(hosp2019, justify = "center")
+```
+```{r, include=FALSE}
+library(kableExtra)
+datagensub %>%
+  kbl("html") %>%
+  kable_material(c("striped", "condensed", "scale_down")) %>% 
+  kable_styling(font_size = 10) %>% 
+  kableExtra::scroll_box(width = "100%")
+```
+
