@@ -4,6 +4,11 @@ description: |
   ***Source of data:*** 
   <br> Manpower: OLM-YCK specialist database (extracted 28 December 2021 - 16 January 2022)
   <br>Workload: KKM SMRP database 2019
+output: 
+  distill::distill_article:
+    self_contained: yes
+    toc: yes
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
@@ -43,7 +48,7 @@ hosp2019share$hospital <- factor(hosp2019share$hospital,
 
 datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
 ```
-
+# Data table: Shared general medical workload
 ```{r, results='asis', message=FALSE}
 knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical workload.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
@@ -52,7 +57,12 @@ knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical wor
 
 #pander(hosp2019, justify = "center")
 ```
+<a href="#top">Return to table of contents</a>
 
+***
+
+
+# Data table: All in
 ```{r, results='asis', message=FALSE}
 knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
@@ -61,6 +71,11 @@ knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>%
 
 #pander(hosp2019, justify = "center")
 ```
+<a href="#top">Return to table of contents</a>
+
+***
+
+
 ```{r urlgensub, include=FALSE}
 urlgensub <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=565087130"
   #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
@@ -80,7 +95,7 @@ gensub$hospital <- factor(gensub$hospital,
 datagensub <- arrange(gensub, type, desc(Subs_prop))
 
 ```
-
+# Data table: General medicine & subspecialties staffing counts
 ```{r, results='asis', message=FALSE}
 knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General medicine & subspecialties staffing counts.", align = "c", font_size = 7) %>% 
   row_spec(1:14, color = "#150377") %>%
@@ -90,6 +105,8 @@ knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General m
 
 #pander(hosp2019, justify = "center")
 ```
+<a href="#top">Return to table of contents</a>
+<br>
 ```{r, include=FALSE}
 library(kableExtra)
 datagensub %>%
