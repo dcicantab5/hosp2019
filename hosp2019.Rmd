@@ -320,3 +320,84 @@ subplot(p_states_gs, p_major_gs, p_minor_gs , nrows = 3, heights = c(0.25, 0.5, 
 #options(browser = 'false')
 #api_create(p, filename = "gensub")
 ```
+<a href="#top">Return to table of contents</a>
+
+***
+
+# Harmonising GenMed & Subs: 
+## Case Study 1 - Drilldown HKL
+
+* Subs-GenMed specialty composition: 82% (45) subs, 18% (10) gen med.
+* Gen med workload involvement composition: 
+  + Gen med admissions handled by GenMed (16), AAIM (11), Endocrinology (11), Gastroenterology (11), Geriatrics (17), Haematology (2) and Infectious Disease (3), Palliative (3) and Rheumatology (2); (total: 76).
+  + Dermatology (19), Nephrology (18), and Neurology (10) are not involved in gen med workload (total: 47).
+* Standardised workload based on gen med admissions only, for HKL is 2 specialists per 1000 admissions (Median for all major hospitals 2.2).
+  + *Shared workload (Fig 4): shortage of 8 specialists.*  
+* Standardised workload based on all in admissions, for HKL is 3 specialists per 1000 admissions (Median for all major hospitals 2.7).
+  + *All in workload (Fig 5): excess of 14 specialists.*
+
+```{r cshkl, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcshkl <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=898591304"
+
+cshkl <- gsheet2tbl(urlcshkl, "cs_hkl")
+
+library(kableExtra)
+cshkl %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:3, color = "#150377")
+```
+<a href="#top">Return to table of contents</a>
+
+## Case Study 2 - Drilldown Serdang
+
+* Subs-GenMed specialty composition: 82% (45) subs, 18% (10) gen med.
+* Gen med workload involvement composition: 
+  + Gen med admissions handled by GenMed (10), Endocrinology (2), Gastroenterology (5), and Infectious Disease (1); (total: 18).
+  + Cardiology (14), Dermatology (4), Nephrology (10), Respiratory (8) & Rheumatology (1) are not involved in gen med workload (total: 37).
+  + *?Inpatient workload for Dermatology, Respiratory & Rheumatology within gen med admissions.*
+* Standardised workload based on gen med admissions only, for Serdang is 2 specialists per 1000 admissions (Median for all major hospitals 1.41).
+  + *Shared workload (Fig 4): excess of 5 specialists.*  
+* Standardised workload based on all in admissions, for Serdang is 2.7 specialists per 1000 admissions (Median for all major hospitals 1.55).
+  + *All in workload (Fig 5): excess of 24 specialists.*
+  
+```{r csserdang, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsserdang <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=57638925"
+
+csserdang <- gsheet2tbl(urlcsserdang, "cs_serdang")
+
+library(kableExtra)
+csserdang %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:2, color = "rgba(250,128,114,1)")
+```
+<a href="#top">Return to table of contents</a>
+
+## Case Study 3 - Drilldown Melaka
+
+* 49% (17) subs, 51% (18) gen med.
+* Dermatology is the only sub not involved in gen med workload (2).
+* Standardised workload based on gen med admissions only, for Melaka is 1.4 specialists per 1000 admissions (Median for all state hospitals 2.2).
+  + *Shared workload (Fig 4): shortage of 17 specialists.*  
+* Standardised workload based on all in admissions, for Melaka is 1.7 specialists per 1000 admissions (Median for all state hospitals 2.7).
+  + *All in workload (Fig 5): shortage of 21 specialists.*
+
+```{r csmelaka, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsmelaka <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1173288709"
+
+csmelaka <- gsheet2tbl(urlcsmelaka, "cs_melaka")
+
+library(kableExtra)
+csmelaka %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(5, color = "#150377")
+```
+<a href="#top">Return to table of contents</a>
