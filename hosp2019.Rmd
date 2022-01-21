@@ -82,7 +82,7 @@ levels(hosp2019$hospital)
 str(hosp2019)
 ```
 # Admissions
-```{r, fig.cap="Admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Gen Med admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 #### Current workload
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
@@ -115,7 +115,7 @@ subplot(
 <a href="#top">Return to table of contents</a>
 
 # Number of Specialists
-```{r, fig.cap="Number of specialists.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Number of specialists involved in handling Gen Med admissions only.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
@@ -147,7 +147,7 @@ subplot(
 <a href="#top">Return to table of contents</a>
 
 # Standardised Workload
-```{r, fig.cap="Standardised Inpatient Workload.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Standardised Inpatient Workload. Denominator is Gen Med admissions.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
 states <- datashare %>% filter(type == 'state')
 states$hospital <- factor(states$hospital)
 #str(states)
@@ -194,7 +194,7 @@ p_minor <- p_minor %>% layout(xaxis = list(title = 'Number of specialists per 10
 #p_minor
 ```
 
-```{r, fig.cap="Standardised Inpatient Workload.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Standardised Inpatient Workload. Denominator is Gen Med admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), shareX = TRUE, shareY = TRUE) %>% 
   layout(title = list(text = "Standardised Inpatient Workload by Type of Facility"))
 
@@ -203,9 +203,14 @@ subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), sh
 ```
 <a href="#top">Return to table of contents</a>
 
+<br>
+
+$${Adequacy = {Std\;Workload}_{Current} - \displaystyle \left[{Std\;Workload}_{Median} \left( \displaystyle \frac{Workload}{1000}\right)\right]}$$
+<br>  
+
 # Specialist Excesses and Shortages: 
 ## *Current Sharing General Medicine Workload*
-```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="\\label{fig:myfig4}Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
@@ -227,8 +232,8 @@ subplot(
 <a href="#top">Return to table of contents</a>
 
 # Specialist Excesses and Shortages: 
-## *All In*
-```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+## *All-in*
+```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
@@ -341,7 +346,7 @@ subplot(p_states_gs, p_major_gs, p_minor_gs , nrows = 3, heights = c(0.25, 0.5, 
 ```{r}
 library(kableExtra)
 sometext <- strsplit(paste0(
-  "excess of 19 specialists"
+  "excess of 18 specialists"
 ), " ")[[1]]
 text_formatted <- paste(
   text_spec(sometext, color = "green", bold = TRUE),
@@ -350,7 +355,7 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *Current Sharing workload (Fig 4):* `r text_formatted`. 
+* *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`. 
   + Standardised workload based on gen med admissions only, for QE is 3.5 specialists per 1000 admissions (Median for all state hospitals 2.2). 
   
 ```{r}
@@ -365,9 +370,9 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *All in workload (Fig 5):* `r text_formatted`.
+* *All in workload [Fig 5](#all-in):* `r text_formatted`.
   + Standardised workload based on all in admissions, for QE is 3.9 specialists per 1000 admissions (Median for all state hospitals 2.7).
-* Specialty composition: 55% (30) subs, 45% (25) gen med (Fig 6).
+* Specialty composition: 55% (30) subs, 45% (25) gen med [Fig 6](#general-medicine-subspecialties).
 * Workload involvement: 
   + Gen med admissions handled by GenMed (25), Gastroenterology (7), Geriatrics (1), Haematology (4) and Infectious Disease (1), and Rheumatology (2); (total: 40).
   + Dermatology (3), Nephrology (5), Neurology (2), and Respiratory (5) are not involved in gen med workload (total: 15).
@@ -403,7 +408,7 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *Current Sharing workload (Fig 4):* `r text_formatted`.
+* *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`.
   + Standardised workload based on gen med admissions only, for HUS is 3.3 specialists per 1000 admissions (Median for all state hospitals 2.2).   
 
 ```{r}
@@ -418,9 +423,9 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *All in workload (Fig 5):* `r text_formatted`.
+* *All in workload [Fig 5](#all-in):* `r text_formatted`.
   + Standardised workload based on all in admissions, for HUS is 4.1 specialists per 1000 admissions (Median for all state hospitals 2.7).
-* Specialty composition: 68% (39) subs, 32% (18) gen med (Fig 6).
+* Specialty composition: 68% (39) subs, 32% (18) gen med [Fig 6](#general-medicine-subspecialties).
 * Workload involvement: 
   + Gen med admissions handled by GenMed (18), Endocrinology (3) Gastroenterology (1), Geriatrics (2), Haematology (3) and Infectious Disease (3), Rheumatology (6), Nephrology (6), Neurology (4), Palliative (1) and Respiratory (5); (total: 52).
   + Dermatology (5) is not involved in gen med workload (total: 5).
@@ -446,7 +451,7 @@ cshus %>%
 ```{r}
 library(kableExtra)
 sometext <- strsplit(paste0(
-  "shortage of 8 specialists"
+  "shortage of 7 specialists"
 ), " ")[[1]]
 text_formatted <- paste(
   text_spec(sometext, color = "red", bold = TRUE),
@@ -455,7 +460,7 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *Current Sharing workload (Fig 4):* `r text_formatted`. 
+* *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`. 
   + Standardised workload based on gen med admissions only, for HKL is 2 specialists per 1000 admissions (Median for all state hospitals 2.2).
 
 ```{r}
@@ -470,9 +475,9 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *All in workload (Fig 5):* `r text_formatted`.
+* *All in workload [Fig 5](#all-in):* `r text_formatted`.
   + Standardised workload based on all in admissions, for HKL is 3 specialists per 1000 admissions (Median for all state hospitals 2.7). 
-* Specialty composition: 79% (96) subs, 21% (27) gen med.
+* Specialty composition: 79% (96) subs, 21% (27) gen med [Fig 6](#general-medicine-subspecialties).
 * Workload involvement: 
   + Gen med admissions handled by GenMed (16), AAIM (11), Endocrinology (11), Gastroenterology (11), Geriatrics (17), Haematology (2) and Infectious Disease (3), Palliative (3) and Rheumatology (2); (total: 76).
   + Dermatology (19), Nephrology (18), and Neurology (10) are not involved in gen med workload (total: 47).
@@ -507,7 +512,7 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *Current Sharing workload (Fig 4):* `r text_formatted`.
+* *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`.
   + Standardised workload based on gen med admissions only, for Serdang is 2 specialists per 1000 admissions (Median for all major hospitals 1.41).  
 
 ```{r}
@@ -522,9 +527,9 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *All in workload (Fig 5):* `r text_formatted`.
+* *All in workload [Fig 5](#all-in):* `r text_formatted`.
   + Standardised workload based on all in admissions, for Serdang is 2.7 specialists per 1000 admissions (Median for all major hospitals 1.55).
-* Specialty composition: 82% (45) subs, 18% (10) gen med.
+* Specialty composition: 82% (45) subs, 18% (10) gen med [Fig 6](#general-medicine-subspecialties).
 * Workload involvement:  
   + Gen med admissions handled by GenMed (10), Endocrinology (2), Gastroenterology (5), and Infectious Disease (1); (total: 18).
   + Cardiology (14), Dermatology (4), Nephrology (10), Respiratory (8) & Rheumatology (1) are not involved in gen med workload (total: 37).
@@ -559,7 +564,7 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *Current Sharing workload (Fig 4):* `r text_formatted`.
+* *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`.
   + Standardised workload based on gen med admissions only, for Melaka is 1.4 specialists per 1000 admissions (Median for all state hospitals 2.2).   
 
 ```{r}
@@ -574,10 +579,10 @@ text_formatted <- paste(
 # To display the text, type `r text_formatted` outside of the chunk
 ```
 
-* *All in workload (Fig 5):* `r text_formatted`.
+* *All in workload [Fig 5](#all-in):* `r text_formatted`.
   + Standardised workload based on all in admissions, for Melaka is 1.7 specialists per 1000 admissions (Median for all state hospitals 2.7).
 * 49% (17) subs, 51% (18) gen med.
-* Specialty composition: see Fig 6. 
+* Specialty composition: see [Fig 6](#general-medicine-subspecialties). 
 * Workload involvement: Dermatology is the only sub not involved in gen med workload (2).
 
 ```{r csmelaka, message=FALSE, echo=FALSE, warning=FALSE}
