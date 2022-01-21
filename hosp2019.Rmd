@@ -461,7 +461,7 @@ text_formatted <- paste(
 ```
 
 * *Current Sharing workload [Fig 4](#current-sharing-general-medicine-workload):* `r text_formatted`. 
-  + Standardised workload based on gen med admissions only, for HKL is 2 specialists per 1000 admissions (Median for all state hospitals 2.2).
+  + Standardised workload based on gen med admissions only, for HKL is 2.1 specialists per 1000 admissions (Median for all state hospitals 2.2).
 
 ```{r}
 library(kableExtra)

@@ -30,4 +30,4 @@ Varying manpower resources across hospitals.
 <br>
 <br> **Provision of manpower resource per unit of workload = Number of specialists per 1000 admissions.**
 <br>
-<br> *e.g. HKL has 74 specialists handling General Medicine workload, for the given number of admissions in HKL (37067), it has 2.0 specialists handling every 1000 admissions.*
+<br> *e.g. HKL has 76 specialists handling General Medicine workload, for the given number of admissions in HKL (37067), it has 2.1 specialists handling every 1000 admissions.*
