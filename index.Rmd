@@ -28,6 +28,8 @@ Varying manpower resources across hospitals.
 <br>
 <br> Because the number of admissions varies across hospitals, the workload is standardised to per 1000 admissions.
 <br>
-<br> **Provision of manpower resource per unit of workload = Number of specialists per 1000 admissions.**
+<br> **Standardised Workload = Number of specialists per 1000 admissions.**
+<br>
+<br> $${Standardised\;Workload = {Number\;of\; specialists} \div \left( \displaystyle \frac{Admissions}{1000}\right)}$$
 <br>
 <br> *e.g. HKL has 76 specialists handling General Medicine workload, for the given number of admissions in HKL (37067), it has 2.1 specialists handling every 1000 admissions.*

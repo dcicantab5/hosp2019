@@ -95,7 +95,7 @@ gensub$hospital <- factor(gensub$hospital,
 datagensub <- arrange(gensub, type, desc(Subs_prop))
 
 ```
-# Data table: General medicine & subspecialties staffing counts
+# Data table: General medicine & subspecialties staffing composition
 ```{r, results='asis', message=FALSE}
 knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General medicine & subspecialties staffing counts.", align = "c", font_size = 7) %>% 
   row_spec(1:14, color = "#150377") %>%
