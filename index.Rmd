@@ -33,3 +33,7 @@ Varying manpower resources across hospitals.
 <br> $${Standardised\;Workload = {Number\;of\; specialists} \div \left( \displaystyle \frac{Admissions}{1000}\right)}$$
 <br>
 <br> *e.g. HKL has 76 specialists handling General Medicine workload, for the given number of admissions in HKL (37067), it has 2.1 specialists handling every 1000 admissions.*
+
+<br>
+
+Limitations: fair distribution requires consideration and information on outpatient, daycare, and referral workload and fulfilling demands for up-to-date treatment provided by a subspecialty.
