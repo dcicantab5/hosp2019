@@ -343,7 +343,17 @@ subplot(p_states_gs, p_major_gs, p_minor_gs , nrows = 3, heights = c(0.25, 0.5, 
 ***
 
 # Case studies
-## Case Study 1 - Drilldown QE
+## Case Study 1 - Drilldown QE  
+
+
+***Subs_prop:*** *proportion of subs*
+<br> ***GenMed_prop:*** *proportion of gen med*
+<br> ***Total:*** *total number of specialists*
+<br> ***Median_current:*** *median standardised workload based on current gen med work sharing*
+<br> ***ES_current:*** *excess/shortage of specialists based on current gen med work sharing*
+<br> ***Median_all:*** *median standardised workload based on all subs contributing to gen med work*
+<br> ***ES_all:*** *excess/shortage of specialists based on all subs contributing to gen med work*
+
 ```{r}
 url_cases <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1867701472"
 
@@ -382,8 +392,9 @@ csqe %>%
   kbl("html", align = "c") %>%
   kable_material(c("hover")) %>% 
   kable_styling(font_size = 12, position = "center") %>%
-  row_spec(1, color = "#150377")
+  row_spec(1, color = "#150377") 
 ```
+*QE workload based on composition. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
 
 <a href="#top">Return to table of contents</a>
 
@@ -419,6 +430,7 @@ cshus %>%
   row_spec(1, color = "#150377")
 #gm+ (Gastro, Endoc, Gery, Nephro, Pall)
 ```
+*HUS workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
 
 <a href="#top">Return to table of contents</a>
 
@@ -453,6 +465,8 @@ cshkl %>%
   kable_styling(font_size = 12, position = "center") %>%
   row_spec(1:3, color = "#150377")
 ```
+*HKL workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 4 - Drilldown Serdang
@@ -485,6 +499,8 @@ csserdang %>%
   kable_styling(font_size = 12, position = "center") %>%
   row_spec(1:2, color = "rgba(250,128,114,1)")
 ```
+*Serdang workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 5 - Drilldown Melaka
@@ -517,6 +533,8 @@ csmelaka %>%
   kable_styling(font_size = 12, position = "center") %>%
   row_spec(1, color = "#150377")
 ```
+*Melaka workload based on composition. General medicine++: General medicine plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 6 - Drilldown TENGKU AMPUAN AFZAN
@@ -549,6 +567,8 @@ cshtaa %>%
   kable_styling(font_size = 12, position = "center") %>%
   row_spec(1:3, color = "#150377")
 ```
+*HTAA workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 7 - Drilldown SULTANAH AMINAH
@@ -581,6 +601,8 @@ cshsa %>%
   kable_styling(font_size = 12, position = "center") %>%
   row_spec(1:2, color = "#150377")
 ```
+*HSA workload based on composition. General medicine+: SMRP partially segragate data by subs; shared workload with some of the existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology & Cardiology are not involved in Gen Med workload.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 8 - Drilldown SEBERANG JAYA
@@ -612,6 +634,8 @@ cssj %>%
   kable_material(c("hover")) %>% 
   kable_styling(font_size = 12, position = "center") 
 ```
+*Seberang Jaya workload based on composition. General medicine+: SMRP partially segragate data by subs; shared workload with some of the existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. All subs are involved in Gen Med workload.*
+
 <a href="#top">Return to table of contents</a>
 
 ## Case Study 9 - Drilldown SULTAN HJ AHMAD SHAH
@@ -643,5 +667,7 @@ csshas %>%
   kable_material(c("hover")) %>% 
   kable_styling(font_size = 12, position = "center")
 ```
+*HOSHAS workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs. All subs are involved in Gen Med workload.*
+
 <a href="#top">Return to table of contents</a>
 
