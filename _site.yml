@@ -3,6 +3,7 @@ title: "Hospital Inpatient Workload 2019"
 description: |
   Hospital Inpatient Workload 2019
 output_dir: "docs"
+google_analytics: "G-7ZVW483F3Z"
 navbar:
   right:
     - text: "Inpatient 2019"
