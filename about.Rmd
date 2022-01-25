@@ -9,8 +9,7 @@ output:
     self_contained: yes
     toc: yes
     toc_depth: 2
-    includes: 
-      _includes: analytics.html
+    _includes: analytics.html
 ---
 
 ```{r setup, include=FALSE}

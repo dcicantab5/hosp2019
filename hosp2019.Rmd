@@ -15,6 +15,7 @@ output:
     self_contained: yes
     toc: yes
     toc_depth: 2
+    _includes: analytics.html
 ---
 
 ```{r setup, include=FALSE}
