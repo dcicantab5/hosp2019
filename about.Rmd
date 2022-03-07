@@ -2,7 +2,7 @@
 title: "About this analysis"
 description: |
   ***Source of data:*** 
-  <br> Manpower: OLM-YCK specialist database (extracted 28 December 2021 - 16 January 2022)
+  <br> Manpower: OLM-YCK specialist database 
   <br>Workload: KKM SMRP database 2019
 output: 
   distill::distill_article:
@@ -21,9 +21,9 @@ library(googlesheets)
 library(gsheet)
 library(dplyr)
 library(kableExtra)
-url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1568757140"  ### 7 March 2022
 # kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
-hosp2019 <- gsheet2tbl(url)
+hosp2019 <- gsheet2tbl(url, "data_combo_totman_7mac2022")
 hosp2019$type <- as.factor(hosp2019$type)
 hosp2019$type <- relevel(hosp2019$type, "state")
 
@@ -35,9 +35,8 @@ hosp2019$hospital <- factor(hosp2019$hospital,
 
 
 # sharing gen med workload data
-urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"
-
-hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen") 
+urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1996562624" ### 7 March 2022
+hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen_7mac2022") 
 
 hosp2019share$type <- as.factor(hosp2019share$type)
 hosp2019share$type <- relevel(hosp2019share$type, "state")
@@ -76,44 +75,4 @@ knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>%
 
 ***
 
-
-```{r urlgensub, include=FALSE}
-urlgensub <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=565087130"
-  #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
-gensub <- gsheet2tbl(urlgensub, "gen_subs") 
-```
-```{r, include=FALSE}
-gensub$type <- as.factor(gensub$type)
-gensub$type <- relevel(gensub$type, "state")
-
-rownames(gensub) <- gensub$hospital
-
-#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
-
-gensub$hospital <- factor(gensub$hospital,
-                   levels = gensub$hospital)
-
-datagensub <- arrange(gensub, type, desc(Subs_prop))
-
-```
-# Data table: General medicine & subspecialties staffing composition
-```{r, results='asis', message=FALSE}
-knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General medicine & subspecialties staffing counts.", align = "c", font_size = 7) %>% 
-  row_spec(1:14, color = "#150377") %>%
-  row_spec(15:41, color = "salmon") %>% 
-  row_spec(42:59, color = "grey") %>% 
-  kableExtra::scroll_box(width = "100%")
-
-#pander(hosp2019, justify = "center")
-```
-<a href="#top">Return to table of contents</a>
-<br>
-```{r, include=FALSE}
-library(kableExtra)
-datagensub %>%
-  kbl("html") %>%
-  kable_material(c("striped", "condensed", "scale_down")) %>% 
-  kable_styling(font_size = 10) %>% 
-  kableExtra::scroll_box(width = "100%")
-```
 

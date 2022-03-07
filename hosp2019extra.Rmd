@@ -1,0 +1,468 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# General Medicine & Subspecialties
+```{r urlgensub, include=FALSE}
+urlgensub <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=565087130"
+  #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
+gensub <- gsheet2tbl(urlgensub, "gen_subs") 
+```
+```{r, include=FALSE}
+gensub$type <- as.factor(gensub$type)
+gensub$type <- relevel(gensub$type, "state")
+
+rownames(gensub) <- gensub$hospital
+
+#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+gensub$hospital <- factor(gensub$hospital,
+                   levels = gensub$hospital)
+
+datagensub <- arrange(gensub, type, desc(Subs_prop))
+```
+```{r states_gs, message=FALSE, echo=FALSE, warning=FALSE}
+states_gs <- datagensub %>% filter(type == 'state')
+states_gs <- arrange(states_gs, type, Subs_prop)
+p_states_gs <- plot_ly(states_gs, y = ~hospital, 
+                       x = ~Subs_prop*100,
+                       type = 'bar',
+                       name = "States Subs Prop",
+                       color = ~type,
+                       colors = col3) %>% 
+  add_trace(x = ~GenMed_prop*100,
+            name = "States Gen Med Prop",
+            opacity = 0.5) %>% 
+  layout(yaxis = list(title = "", categoryorder = "array", categoryarray =states_gs$hospital, tickfont = list(size = 8)), 
+         barmode = "stack",
+         xaxis = list(title = "Proportion", titlefont = list(size=8), tickfont = list(size=8)))
+
+#p_states_gs
+```
+
+```{r major_gs, message=FALSE, echo=FALSE, warning=FALSE}
+major_gs <- datagensub %>% filter(type == 'major')
+major_gs <- arrange(major_gs, type, Subs_prop)
+p_major_gs <- plot_ly(major_gs, y = ~hospital, 
+                       x = ~Subs_prop*100,
+                       type = 'bar',
+                       name = "Major Subs Prop",
+                       color = ~type,
+                       colors = col3) %>% 
+  add_trace(x = ~GenMed_prop*100,
+            name = "Major Gen Med Prop",
+            opacity = 0.5) %>% 
+  layout(yaxis = list(title = "", categoryorder = "array", categoryarray =major_gs$hospital, tickfont = list(size = 8)), 
+         barmode = "stack",
+         xaxis = list(title = "Proportion", titlefont = list(size=8), tickfont = list(size=8)))
+
+#p_major_gs
+```
+
+```{r minor_gs, message=FALSE, echo=FALSE, warning=FALSE}
+minor_gs <- datagensub %>% filter(type == 'minor')
+minor_gs <- arrange(minor_gs, type, Subs_prop)
+p_minor_gs <- plot_ly(minor_gs, y = ~hospital, 
+                       x = ~Subs_prop*100,
+                       type = 'bar',
+                       name = "Minor Subs Prop",
+                       color = ~type,
+                       colors = col3) %>% 
+  add_trace(x = ~GenMed_prop*100,
+            name = "Minor Gen Med Prop",
+            opacity = 0.5) %>% 
+  layout(yaxis = list(title = "", categoryorder = "array", categoryarray =minor_gs$hospital, tickfont = list(size = 8)), 
+         barmode = "stack",
+         xaxis = list(title = "Proportion", titlefont = list(size=8), tickfont = list(size=8)))
+
+#p_minor_gs
+```
+```{r, fig.cap="General medicine & subspecialties proportions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+subplot(p_states_gs, p_major_gs, p_minor_gs , nrows = 3, heights = c(0.25, 0.5, 0.25), shareX = TRUE, shareY = TRUE) %>% 
+  layout(title = list(text = "General Medicine & Subspecialties Manpower by Type of Facility"))
+
+#options(browser = 'false')
+#api_create(p, filename = "gensub")
+```
+<a href="#top">Return to table of contents</a>
+
+***
+
+# Case studies
+## Case Study 1 - Drilldown QE  
+
+
+***Subs_prop:*** *proportion of subs*
+<br> ***GenMed_prop:*** *proportion of gen med*
+<br> ***Total:*** *total number of specialists*
+<br> ***Median_current:*** *median standardised workload based on current gen med work sharing*
+<br> ***ES_current:*** *excess/shortage of specialists based on current gen med work sharing*
+<br> ***Median_all:*** *median standardised workload based on all subs contributing to gen med work*
+<br> ***ES_all:*** *excess/shortage of specialists based on all subs contributing to gen med work*
+
+```{r}
+url_cases <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1867701472"
+
+cases <- gsheet2tbl(url_cases, "casestudy")  
+
+cases$type <- as.factor(cases$type)
+cases$type <- relevel(cases$type, "state")
+
+rownames(cases) <- cases$hospital
+
+cases$hospital <- factor(cases$hospital,
+                   levels = cases$hospital)
+
+cases %>%
+  filter(hospital=="QUEEN ELIZABETH") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "green"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r csqe, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsqe <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1808792127"
+
+csqe <- gsheet2tbl(urlcsqe, "cs_qe")
+
+
+csqe %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1, color = "#150377") 
+```
+*QE workload based on composition. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+
+## Case Study 2 - Drilldown HUS
+
+```{r}
+cases %>%
+  filter(hospital=="UMUM SARAWAK") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "green"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r cshus, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcshus <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1454553381"
+
+cshus <- gsheet2tbl(urlcshus, "cs_hus")
+
+
+cshus %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1, color = "#150377")
+#gm+ (Gastro, Endoc, Gery, Nephro, Pall)
+```
+*HUS workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 3 - Drilldown HKL
+
+```{r}
+cases %>%
+  filter(hospital=="KUALA LUMPUR") %>% 
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "red"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) 
+
+```
+
+```{r cshkl, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcshkl <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=898591304"
+
+cshkl <- gsheet2tbl(urlcshkl, "cs_hkl")
+
+
+cshkl %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:3, color = "#150377")
+```
+*HKL workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 4 - Drilldown Serdang
+
+```{r}
+cases %>%
+  filter(hospital=="SERDANG") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "green"),
+              popover = paste("am:", cases$Total))
+```
+  
+```{r csserdang, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsserdang <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=57638925"
+
+csserdang <- gsheet2tbl(urlcsserdang, "cs_serdang")
+
+
+csserdang %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:2, color = "rgba(250,128,114,1)")
+```
+*Serdang workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 5 - Drilldown Melaka
+
+```{r}
+cases %>%
+  filter(hospital=="MELAKA") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "red"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "red"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r csmelaka, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsmelaka <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1173288709"
+
+csmelaka <- gsheet2tbl(urlcsmelaka, "cs_melaka")
+
+
+csmelaka %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1, color = "#150377")
+```
+*Melaka workload based on composition. General medicine++: General medicine plus other contributing subs with segregated admissions data in SMRP. Dermatology not involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 6 - Drilldown TENGKU AMPUAN AFZAN
+
+```{r}
+cases %>%
+  filter(hospital=="TENGKU AMPUAN AFZAN") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "green"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r cshtaa, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcshtaa <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=2057673234"
+
+cshtaa <- gsheet2tbl(urlcshtaa, "cs_htaa")
+
+
+cshtaa %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:3, color = "#150377")
+```
+*HTAA workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 7 - Drilldown SULTANAH AMINAH
+
+```{r}
+cases %>%
+  filter(hospital=="SULTANAH AMINAH") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "red"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "red"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r cshsa, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcshsa <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=2062444221"
+
+cshsa <- gsheet2tbl(urlcshsa, "cs_hsa")
+
+
+cshsa %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") %>%
+  row_spec(1:2, color = "#150377")
+```
+*HSA workload based on composition. General medicine+: SMRP partially segragate data by subs; shared workload with some of the existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. Dermatology & Cardiology are not involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 8 - Drilldown SEBERANG JAYA
+
+```{r}
+cases %>%
+  filter(hospital=="SEBERANG JAYA") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "green"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "red"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r cssj, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcssj <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1014959329"
+
+cssj <- gsheet2tbl(urlcssj, "cs_sj")
+
+
+cssj %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center") 
+```
+*Seberang Jaya workload based on composition. General medicine+: SMRP partially segragate data by subs; shared workload with some of the existing contributing subs. General medicine++: General medicine+ plus other contributing subs with segregated admissions data in SMRP. All subs are involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+## Case Study 9 - Drilldown SULTAN HJ AHMAD SHAH
+
+```{r}
+cases %>%
+  filter(hospital=="SULTAN HJ AHMAD SHAH") %>%
+  kbl("html", align = "c", escape = F) %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 10, position = "center") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(7, color = "white", bold = T,
+              background = ifelse(cases$ES_current < 0, "red", "red"),
+              popover = paste("am:", cases$Total)) %>%
+  column_spec(9, color = "white", bold = T,
+              background = ifelse(cases$ES_all < 0, "red", "red"),
+              popover = paste("am:", cases$Total))
+```
+
+```{r csshas, message=FALSE, echo=FALSE, warning=FALSE}
+
+urlcsshas <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=250197512"
+
+csshas <- gsheet2tbl(urlcsshas, "cs_shas")
+
+
+csshas %>%
+  kbl("html", align = "c") %>%
+  kable_material(c("hover")) %>% 
+  kable_styling(font_size = 12, position = "center")
+```
+*HOSHAS workload based on composition. General medicine+: SMRP did not segragate data by subs; shared workload with existing contributing subs. All subs are involved in Gen Med workload.*
+
+<a href="#top">Return to table of contents</a>
+
+<br>
+$${Adequacy = {Std\;Workload}_{Current} - \displaystyle \left[{Std\;Workload}_{Median} \left( \displaystyle \frac{Workload}{1000}\right)\right]}$$
+<br> 
+
+
+#### from About.Rmd
+```{r urlgensub2, include=FALSE}
+urlgensub <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=565087130"
+  #"https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=710983312"  
+gensub <- gsheet2tbl(urlgensub, "gen_subs") 
+```
+```{r, include=FALSE}
+gensub$type <- as.factor(gensub$type)
+gensub$type <- relevel(gensub$type, "state")
+
+rownames(gensub) <- gensub$hospital
+
+#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+gensub$hospital <- factor(gensub$hospital,
+                   levels = gensub$hospital)
+
+datagensub <- arrange(gensub, type, desc(Subs_prop))
+
+```
+# Data table: General medicine & subspecialties staffing composition
+```{r, results='asis', message=FALSE}
+knitr::kable(datagensub[1:59,c(1,13:21,23:27)], caption = "Data table: General medicine & subspecialties staffing counts.", align = "c", font_size = 7) %>% 
+  row_spec(1:14, color = "#150377") %>%
+  row_spec(15:41, color = "salmon") %>% 
+  row_spec(42:59, color = "grey") %>% 
+  kableExtra::scroll_box(width = "100%")
+
+#pander(hosp2019, justify = "center")
+```
+<a href="#top">Return to table of contents</a>
+<br>
+```{r, include=FALSE}
+library(kableExtra)
+datagensub %>%
+  kbl("html") %>%
+  kable_material(c("striped", "condensed", "scale_down")) %>% 
+  kable_styling(font_size = 10) %>% 
+  kableExtra::scroll_box(width = "100%")
+```
+
+
+

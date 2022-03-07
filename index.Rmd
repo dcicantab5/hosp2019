@@ -23,17 +23,19 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 ***Workload dictates amount of manpower.***
 
-Varying manpower resources across hospitals.
-<br> Varying workload across hospitals.
-<br>
-<br> Because the number of admissions varies across hospitals, the workload is standardised to per 1000 admissions.
+
 <br>
 <br> **Standardised Workload = Number of specialists per 1000 admissions.**
 <br>
 <br> $${Standardised\;Workload = {Number\;of\; specialists} \div \left( \displaystyle \frac{Admissions}{1000}\right)}$$
 <br>
-<br> *e.g. HKL has 76 specialists handling General Medicine workload, for the given number of admissions in HKL (37067), it has 2.1 specialists handling every 1000 admissions.*
+<br> *e.g. HKL has 60 specialists handling General Medicine workload, for the given number of admissions in HKL (37,067), it has 1.6 specialists handling every 1000 admissions.*
 
 <br>
 
-Limitations: fair distribution requires consideration and information on outpatient, daycare, and referral workload and fulfilling demands for up-to-date treatment provided by a subspecialty.
+**CAUTION**: fair distribution requires consideration and information on:
+<br> 1. outpatient clinic volume, 
+<br> 2. daycare volume,
+<br> 3. procedure volume,
+<br> 4. referral workload, 
+<br> 5. fulfilling demands for up-to-date treatment provided by a subspecialty.
