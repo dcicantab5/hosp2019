@@ -66,7 +66,7 @@ datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
 ```{r url, include=FALSE}
 #### ALL IN ####
 # url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
-url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  ### 7 March 2022
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1568757140"  ### 7 March 2022
 # kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
 hosp2019 <- gsheet2tbl(url, "data_combo_totman_7mac2022")
 hosp2019$type <- as.factor(hosp2019$type)
