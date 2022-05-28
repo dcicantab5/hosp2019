@@ -59,7 +59,7 @@ knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical wor
   row_spec(1:14, color = "#150377") %>%
   row_spec(15:40, color = "salmon") %>% 
   row_spec(41:55, color = "grey") %>% 
-  kable_styling(position = "float_left")
+  kable_styling(position = "float_left", font_size = 10)
 
 #pander(hosp2019, justify = "center")
 ```
@@ -73,7 +73,8 @@ knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical wor
 knitr::kable(dataallin[1:55,], caption = "Data table: All in.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
   row_spec(15:40, color = "salmon") %>% 
-  row_spec(41:55, color = "grey")
+  row_spec(41:55, color = "grey")%>% 
+  kable_styling(position = "float_left", font_size = 10)
 
 #pander(hosp2019, justify = "center")
 ```
