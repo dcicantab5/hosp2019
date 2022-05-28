@@ -58,7 +58,8 @@ dataallin <- arrange(hosp2019, type, desc(spec_n_per_1000_adm))
 knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical workload.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
   row_spec(15:40, color = "salmon") %>% 
-  row_spec(41:55, color = "grey")
+  row_spec(41:55, color = "grey") %>% 
+  kable_styling(position = "float_left")
 
 #pander(hosp2019, justify = "center")
 ```
