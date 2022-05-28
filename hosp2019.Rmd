@@ -9,15 +9,16 @@ author:
   - name: Dr Yoon Chee Kin
     affiliation: Clinical Research Centre & Department of Medicine Hospital Pulau Pinang
 date: "`2022-05-28`"
-output: 
-  html_document:
-    css: custom.css
+output:
+  distill::distill_article:
+    self_contained: yes
     toc: yes
+    toc_float: yes
   pdf_document: 
-    toc: yes
-always_allow_html: true
+    toc: true
+always_allow_html: yes
 ---
-\pagebreak
+
 
 ```{r setup, include=FALSE}
 # first pub 17 Jan 2022
@@ -164,7 +165,7 @@ subplot(
 
 <a href="#top">Return to table of contents</a>
 
-<div class="pagebreak"></div>
+\pagebreak
 
 # Number of Specialists Sharing Admissions Workload 7 March 2022
 ```{r, fig.cap="Number of specialists sharing admissions workload 7 March 2022.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}

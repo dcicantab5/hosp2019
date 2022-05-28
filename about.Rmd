@@ -21,22 +21,11 @@ library(googlesheets)
 library(gsheet)
 library(dplyr)
 library(kableExtra)
-url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1568757140"  ### 7 March 2022
-# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
-hosp2019 <- gsheet2tbl(url, "data_combo_totman_7mac2022")
-hosp2019$type <- as.factor(hosp2019$type)
-hosp2019$type <- relevel(hosp2019$type, "state")
-
-rownames(hosp2019) <- hosp2019$hospital
-rownames(hosp2019)
-
-hosp2019$hospital <- factor(hosp2019$hospital,
-                   levels = hosp2019$hospital)
 
 
 # sharing gen med workload data
-urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1996562624" ### 7 March 2022
-hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen_7mac2022") 
+urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=49215200" ### 7 March 2022
+hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen_26may2022") 
 
 hosp2019share$type <- as.factor(hosp2019share$type)
 hosp2019share$type <- relevel(hosp2019share$type, "state")
@@ -47,6 +36,22 @@ hosp2019share$hospital <- factor(hosp2019share$hospital,
                    levels = hosp2019share$hospital)
 
 datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
+
+####################################################################
+
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1228314601"  ### 7 March 2022
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+hosp2019 <- gsheet2tbl(url, "data_combo_totman_26may2022")
+hosp2019$type <- as.factor(hosp2019$type)
+hosp2019$type <- relevel(hosp2019$type, "state")
+
+rownames(hosp2019) <- hosp2019$hospital
+rownames(hosp2019)
+
+hosp2019$hospital <- factor(hosp2019$hospital,
+                   levels = hosp2019$hospital)
+
+dataallin <- arrange(hosp2019, type, desc(spec_n_per_1000_adm))
 ```
 # Data table: Shared general medical workload
 ```{r, results='asis', message=FALSE}
@@ -64,7 +69,7 @@ knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical wor
 
 # Data table: All in
 ```{r, results='asis', message=FALSE}
-knitr::kable(hosp2019[1:55,], caption = "Data table: All in.", align = "c") %>% 
+knitr::kable(dataallin[1:55,], caption = "Data table: All in.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
   row_spec(15:40, color = "salmon") %>% 
   row_spec(41:55, color = "grey")
