@@ -1,6 +1,5 @@
 ---
 title: "Hospitals Inpatient Workload 2019"
-
 author:
   - name: Dr Saiful Safuan Md Sani 
     url: https://saifulsafuan.com
@@ -9,14 +8,16 @@ author:
     affiliation: Clinical Research Centre & Department of Medicine Hospital Taiping
   - name: Dr Yoon Chee Kin
     affiliation: Clinical Research Centre & Department of Medicine Hospital Pulau Pinang
-date: "`2022-03-07`"
+date: "`2022-05-28`"
 output: 
-  distill::distill_article:
-    self_contained: yes
+  html_document:
+    css: custom.css
     toc: yes
-    toc_depth: 2
-    _includes: analytics.html
+  pdf_document: 
+    toc: yes
+always_allow_html: true
 ---
+\pagebreak
 
 ```{r setup, include=FALSE}
 # first pub 17 Jan 2022
@@ -31,6 +32,13 @@ library(DT)
 library(kableExtra)
 #library(zoo) # moving averages
 #library(RcppRoll) # running total
+
+#  distill::distill_article:
+#    self_contained: yes
+#    toc: yes
+#    toc_depth: 2
+#    _includes: analytics.html
+
 ```
 ```{r chartstudio, include=FALSE}
 #Sys.setenv("plotly_username"="dcicantab5")
@@ -38,7 +46,7 @@ library(kableExtra)
 ```
 
 ```{r urlshare, include=FALSE}
-#### SHARING GEN MED WORKLOAD ####
+#### SHARING GEN MED WORKLOAD 7 March 2022####
 #library(googlesheets4)
 # read_sheet(urlshare, "data_combo_sharegen") #alternative
 
@@ -47,8 +55,7 @@ library(kableExtra)
 
 urlshare <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1996562624" ### 7 March 2022
 hosp2019share <- gsheet2tbl(urlshare, "data_combo_sharegen_7mac2022") 
-```
-```{r, include=FALSE}
+
 hosp2019share$type <- as.factor(hosp2019share$type)
 hosp2019share$type <- relevel(hosp2019share$type, "state")
 
@@ -62,9 +69,25 @@ hosp2019share$hospital <- factor(hosp2019share$hospital,
 
 datashare <- arrange(hosp2019share, type, desc(spec_n_per_1000_adm))
 ```
+```{r, include=FALSE}
+### 26 May 2022
+urlshare26may2022 <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=49215200"  ### 26 May 2022
+hosp2019share26may2022 <- gsheet2tbl(urlshare26may2022, "data_combo_sharegen_26may2022") 
+hosp2019share26may2022$type <- as.factor(hosp2019share26may2022$type)
+hosp2019share26may2022$type <- relevel(hosp2019share26may2022$type, "state")
 
-```{r url, include=FALSE}
-#### ALL IN ####
+rownames(hosp2019share26may2022) <- hosp2019share26may2022$hospital
+rownames(hosp2019share26may2022)
+
+#col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+hosp2019share26may2022$hospital <- factor(hosp2019share26may2022$hospital,
+                   levels = hosp2019share26may2022$hospital)
+
+datashare26may2022 <- arrange(hosp2019share26may2022, type, desc(spec_n_per_1000_adm))
+```
+```{r url 7 March 2022, include=FALSE}
+#### ALL IN 7 March 2022####
 # url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
 url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1568757140"  ### 7 March 2022
 # kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
@@ -88,7 +111,27 @@ levels(hosp2019$hospital)
 ```{r, message=FALSE, echo=FALSE, warning=FALSE, include=FALSE}
 str(hosp2019)
 ```
-# General Medicine Admissions
+```{r url 26 May 2022, include=FALSE}
+#### ALL IN 26 May 2022####
+# url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=1228314601"  ### 26 May 2022
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+hosp201926may2022 <- gsheet2tbl(url, "data_combo_totman_26may2022")
+hosp201926may2022$type <- as.factor(hosp201926may2022$type)
+hosp201926may2022$type <- relevel(hosp201926may2022$type, "state")
+
+rownames(hosp201926may2022) <- hosp201926may2022$hospital
+rownames(hosp201926may2022)
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+hosp201926may2022$hospital <- factor(hosp201926may2022$hospital,
+                   levels = hosp201926may2022$hospital)
+
+data26may2022 <- arrange(hosp201926may2022, desc(spec_n_per_1000_adm))
+```
+
+# Shared Admissions Workload
 ```{r, fig.cap="Gen Med admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 #### Current workload
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
@@ -101,7 +144,7 @@ p <- plot_ly(datashare_adm, y = ~factor(hospital), x = ~admission, alpha = 0.97,
 subplot(
   add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
-     title = "General Medicine Admissions <br><sup></sup>",
+     title = "Shared Admissions Workload<br><sup></sup>",
      yaxis = list(title = "",
      categoryorder = "array",
      categoryarray = ~datashare_adm$hospital, tickfont = list(size = 10)),
@@ -121,8 +164,10 @@ subplot(
 
 <a href="#top">Return to table of contents</a>
 
-# Number of Specialists Sharing General Medicine Workload
-```{r, fig.cap="Number of specialists involved in handling Gen Med admissions only.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+<div class="pagebreak"></div>
+
+# Number of Specialists Sharing Admissions Workload 7 March 2022
+```{r, fig.cap="Number of specialists sharing admissions workload 7 March 2022.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
@@ -134,7 +179,7 @@ p <- plot_ly(datashare_spec, y = ~factor(hospital), x = ~spec_sharegen, alpha = 
 subplot(
   add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
-     title = "Specialists Sharing General Medicine Workload<br><sup></sup>",
+     title = "Specialists Sharing Admissions Workload 7 March 2022<br><sup></sup>",
      yaxis = list(title = "",
      categoryorder = "array",
      categoryarray = ~datashare_spec$hospital, tickfont = list(size = 10)),
@@ -153,7 +198,43 @@ subplot(
 ```
 <a href="#top">Return to table of contents</a>
 
-# Standardised Workload (Current Sharing)
+\pagebreak
+
+# Number of Specialists Sharing Admissions Workload 26 May 2022
+```{r, fig.cap="Number of specialists sharing admissions workload 26 May 2022.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+datashare_spec26may2022 <- arrange(hosp2019share26may2022, spec_n)
+datashare_spec26may2022$hospital <- factor(datashare_spec26may2022$hospital,
+                   levels = datashare_spec26may2022$hospital)
+
+p <- plot_ly(datashare_spec26may2022, y = ~factor(hospital), x = ~spec_n, alpha = 0.97, size = 13)
+subplot(
+  add_bars(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Specialists Sharing Admissions Workload 26 May 2022<br><sup></sup>",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~datashare_spec26may2022$hospital, tickfont = list(size = 10)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.9)) %>% 
+ layout(annotations = 
+ list(x = 1, y = 0.51, text = "", 
+      showarrow = F, xref='paper', yref='paper', 
+      xanchor='right', yanchor='auto', xshift=0, yshift=0,
+      font=list(size=12, color="grey"))
+ )
+
+
+#options(browser = 'false')
+#api_create(p, filename = "hosp2019_spec_n")
+```
+<a href="#top">Return to table of contents</a>
+
+\pagebreak
+
+# Standardised Shared Admissions Workload by Type of Facility 7 March 2022
 ```{r, fig.cap="Standardised Inpatient Workload. Denominator is Gen Med admissions.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
 states <- datashare %>% filter(type == 'state')
 states$hospital <- factor(states$hospital)
@@ -201,14 +282,72 @@ p_minor <- p_minor %>% layout(xaxis = list(title = 'Number of specialists per 10
 #p_minor
 ```
 
-```{r, fig.cap="Standardised Inpatient Workload. Denominator is Gen Med admissions.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, fig.cap="Standardised Shared Admissions Workload 7 March 2022.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), shareX = TRUE, shareY = TRUE) %>% 
-  layout(title = list(text = "Standardised Inpatient Workload by Type of Facility"))
+  layout(title = list(text = "Standardised Shared Admissions Workload by Type of Facility 7 March 2022"))
 
 #options(browser = 'false')
 #api_create(p, filename = "hosp2019_spec_n_per_1000_adm")
 ```
 <a href="#top">Return to table of contents</a>
+
+\pagebreak
+
+# Standardised Shared Admissions Workload by Type of Facility 26 May 2022
+```{r, fig.cap="Standardised Inpatient Workload. Denominator is Gen Med admissions.", out.extra="class=external", message=FALSE, echo=FALSE, warning=FALSE}
+states <- datashare26may2022 %>% filter(type == 'state')
+states$hospital <- factor(states$hospital)
+#str(states)
+
+p_states <- plot_ly(states, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'States', color = ~factor(type), colors = col3)
+p_states <- p_states %>% add_trace(states, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_states <- p_states %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_states
+
+major <- datashare26may2022 %>% filter(type == 'major')
+major$hospital <- factor(major$hospital)
+#str(major)
+
+p_major <- plot_ly(major, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'Major', color = ~factor(type), colors = col3)
+p_major <- p_major %>% add_trace(major, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_major <- p_major %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_major
+
+minor <- datashare26may2022 %>% filter(type == 'minor')
+minor$hospital <- factor(minor$hospital)
+#str(minor)
+
+p_minor <- plot_ly(minor, y = ~hospital, x = ~spec_n_per_1000_adm, type = 'bar',  name = 'Minor', color = ~factor(type), colors = col3)
+p_minor <- p_minor %>% add_trace(minor, y = ~hospital, x = ~median, 
+                      type = 'scatter', 
+                      name = 'Median',
+                      mode = "lines", 
+                      line = list(color = "crimson", dash = 'dot', width = 7), 
+                      opacity = 0.97)
+p_minor <- p_minor %>% layout(xaxis = list(title = 'Number of specialists per 1000 admissions'), yaxis = list(title = '', categoryorder = "total ascending", tickfont = list(size = 8)))
+
+#p_minor
+```
+
+```{r, fig.cap="Standardised Shared Admissions Workload 26 May 2022.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), shareX = TRUE, shareY = TRUE) %>% 
+  layout(title = list(text = "Standardised Shared Admissions Workload by Type of Facility 26 May 2022"))
+
+#options(browser = 'false')
+#api_create(p, filename = "hosp2019_spec_n_per_1000_adm")
+```
 
 # Specialist Excesses and Shortages: 
 
@@ -252,20 +391,22 @@ $${{Std\;Workload}_{Current} = {60} \div \left( \displaystyle \frac{30000}{1000}
 $${Adequacy = {60} - {30} = Excess\;30\;specialists}$$
 <br>
 
-## *Current Sharing General Medicine Workload*
+\pagebreak
+
+## *Shared Admissions Workload 7 March 2022*
 ```{r, fig.cap="\\label{fig:myfig4}Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
-datashare <- arrange(hosp2019share, spec_adequacy)
+datashare <- arrange(hosp2019share, spec_adequacy7mac2022)
 datashare$hospital <- factor(datashare$hospital,
                    levels = datashare$hospital)
 
-p <- plot_ly(datashare, y = ~factor(hospital), x = ~spec_adequacy, alpha = 0.97, size = 13)
+p <- plot_ly(datashare, y = ~factor(hospital), x = ~spec_adequacy7mac2022, alpha = 0.97, size = 13)
 subplot(
   add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
-     title = "Specialist Excesses and Shortages",
+     title = "Specialist Excesses and Shortages 7 March 2022",
      yaxis = list(title = "",
      categoryorder = "array",
      categoryarray = ~datashare$hospital, tickfont = list(size = 8)),
@@ -274,20 +415,47 @@ subplot(
 ```
 <a href="#top">Return to table of contents</a>
 
-## *All-in*
-```{r, fig.cap="Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+\pagebreak
+
+## *Shared Admissions Workload 26 May 2022*
+```{r, fig.cap="\\label{fig:myfig4}Specialist Excesses and Shortages. Negative values are shortages, and positive values are excesses. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived using that hospital's current workload.", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+col4 <- c(`state` = "red", `major` = "green", `minor` = "yellow")
+datashare26may2022 <- arrange(hosp2019share26may2022, spec_adequacy26may2022)
+datashare26may2022$hospital <- factor(datashare26may2022$hospital,
+                   levels = datashare26may2022$hospital)
+
+p <- plot_ly(datashare26may2022, y = ~factor(hospital), x = ~spec_adequacy26may2022)
+subplot(
+  add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE, alpha = 0.97, size = 13) 
+) %>% layout(
+     title = "Specialist Excesses and Shortages 26 May 2022",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~datashare26may2022$hospital, tickfont = list(size = 8)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.8))
+
+```
+<a href="#top">Return to table of contents</a>
+
+\pagebreak
+
+## *All-in 7 March 2022*
+```{r, fig.cap="Specialist Excesses and Shortages 7 March 2022. Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
 
 col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
 
-data <- arrange(hosp2019, spec_adequacy)
+data <- arrange(hosp2019, spec_adequacy7mac2022)
 data$hospital <- factor(data$hospital,
                    levels = data$hospital)
 
-p <- plot_ly(data, y = ~factor(hospital), x = ~spec_adequacy, alpha = 0.97, size = 13)
+p <- plot_ly(data, y = ~factor(hospital), x = ~spec_adequacy7mac2022, alpha = 0.97, size = 13)
 subplot(
   add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
 ) %>% layout(
-     title = "Specialist Excesses and Shortages",
+     title = "Specialist Excesses and Shortages 7 March 2022",
      yaxis = list(title = "",
      categoryorder = "array",
      categoryarray = ~data$hospital, tickfont = list(size = 8)),
@@ -296,3 +464,26 @@ subplot(
 ```
 <a href="#top">Return to table of contents</a>
 
+\pagebreak
+
+## *All-in 26 May 2022*
+```{r, fig.cap="Specialist Excesses and Shortages 26 May 2022. Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+data26may2022 <- arrange(hosp201926may2022, spec_adequacy26may2022)
+data26may2022$hospital <- factor(data26may2022$hospital,
+                   levels = data26may2022$hospital)
+
+p <- plot_ly(data26may2022, y = ~factor(hospital), x = ~spec_adequacy26may2022, alpha = 0.97, size = 13)
+subplot(
+  add_markers(p, color = ~factor(type), colors = col3,  showlegend = TRUE) 
+) %>% layout(
+     title = "Specialist Excesses and Shortages 26 May 2022",
+     yaxis = list(title = "",
+     categoryorder = "array",
+     categoryarray = ~data26may2022$hospital, tickfont = list(size = 8)),
+     xaxis = list(title = "Number of specialists")
+) %>% layout(legend = list(x = 0.77, y = 0.8))
+```
+<a href="#top">Return to table of contents</a>
