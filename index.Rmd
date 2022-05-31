@@ -39,3 +39,10 @@ knitr::opts_chunk$set(echo = FALSE)
 <br> 3. procedure volume,
 <br> 4. referral workload, 
 <br> 5. fulfilling demands for up-to-date treatment provided by a subspecialty.
+
+<br>
+
+**Peculiarities**
+<br> Medical subspecialties within state and major government hospitals in Malaysia have different administration configuration. Hence admissions workload are categorised into two: ***shared admissions workload*** and ***all-in admissions workload***. In shared admissions workload, admissions workload are handled by general medicine and certain medical subspecialties. Participating medical subspecialities vary between centres. In all-in admissions workload, all admissions into general medicine and medical subspecialties are pooled together, along with pooled manpower.
+
+<br>

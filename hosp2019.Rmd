@@ -363,11 +363,11 @@ subplot(p_states, p_major, p_minor , nrows = 3, heights = c(0.25, 0.5, 0.25), sh
 \end{equation} 
 
 <br> 
-<br> *e.g. for a hypothetical State Hospital Ledang which has 60 specialists handling General Medicine workload, with a 30,000 admissions,*
+<br> *e.g. by 26 May 2022, for Hospital Umum Sarawak which has 51 specialists sharing admissions workload of 12,768 admissions,*
 <br> 
-$${{Std\;Workload}_{Current} = {60} \div \left( \displaystyle \frac{30000}{1000}\right) = 2.0\;spec\;per\;1000\;admissions}$$
+$${{Std\;Workload}_{Current} = {51} \div \left( \displaystyle \frac{12768}{1000}\right) = 4.0\;spec\;per\;1000\;admissions}$$
 <br> 
-<br> *if say for example, the median of standardised workload for all state hospitals is 1.0 spec per 1000 admissions, then rearranging \@ref(eq:StdW),*
+<br> *rearranging \@ref(eq:StdW), we can calculate the number of specialists at median standardised workload for every hospital, given the number of admissions in each hospital*
 <br>
 
 \begin{equation}
@@ -375,9 +375,13 @@ $${{Std\;Workload}_{Current} = {60} \div \left( \displaystyle \frac{30000}{1000}
 (\#eq:StdWn)
 \end{equation} 
 
+<br>
+<br> *by 26 May 2022, the median of standardised workload for state hospitals cohort is 2.1 spec per 1000 admissions, hence for Hospital Umum Sarawak,*
+<br>
+
 <br> 
 \begin{equation}
-{{Number\;of\; specialists}_{Median} = 1.0 \times  \left( \displaystyle \frac{30000}{1000}\right) = 30\;specialists }
+{{Number\;of\; specialists}_{Median} = 2.1 \times  \left( \displaystyle \frac{12768}{1000}\right) = 27\;specialists }
 \end{equation} 
 <br> 
 
@@ -389,7 +393,7 @@ $${{Std\;Workload}_{Current} = {60} \div \left( \displaystyle \frac{30000}{1000}
 \end{equation} 
 
 <br> 
-$${Adequacy = {60} - {30} = Excess\;30\;specialists}$$
+$${Adequacy = {51} - {27} = Excess\;24\;specialists}$$
 <br>
 
 \pagebreak
@@ -486,5 +490,76 @@ subplot(
      categoryarray = ~data26may2022$hospital, tickfont = list(size = 8)),
      xaxis = list(title = "Number of specialists")
 ) %>% layout(legend = list(x = 0.77, y = 0.8))
+```
+<a href="#top">Return to table of contents</a>
+
+```{r url allin explorer, include=FALSE}
+#### ALL IN explorer####
+# url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=683778892"  ### 26 May 2022
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+explorer_allin <- gsheet2tbl(url, "explorer_allin")
+explorer_allin$type <- as.factor(explorer_allin$type)
+explorer_allin$type <- relevel(explorer_allin$type, "state")
+
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+
+
+dataexplorer_allin <- arrange(explorer_allin, desc(spec_adequacy))
+```
+
+```{r url shared explorer, include=FALSE}
+#### ALL IN explorer####
+# url <- 'https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit?usp=sharing'  
+url <- "https://docs.google.com/spreadsheets/d/1SFtj8JD1JDLMUdUExFoovDt6uIAFh5pWSpxPzZ_xK1Q/edit#gid=601934587"  ### 26 May 2022
+# kkm data from datuk noel thomas from dr cheah wee kooi; email feb 2021
+explorer_shared <- gsheet2tbl(url, "explorer_shared")
+explorer_shared$type <- as.factor(explorer_shared$type)
+explorer_shared$type <- relevel(explorer_shared$type, "state")
+
+
+col3 <- c(`state` = "#150377", `major` = "salmon", `minor` = "grey")
+
+
+
+dataexplorer_shared <- arrange(explorer_shared, desc(spec_adequacy))
+```
+## *All-in 7 March 2022::26 May 2022* 
+```{r, fig.cap="Specialist Excesses and Shortages 7 March 2022::26 May 2022 (All-in manpower & Workload). Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+#### ALL-IN change
+fig <- explorer_allin
+
+fig <- fig %>% plot_ly(x = ~spec_adequacy, y = ~hospital, colors = ~type, symbol = ~date, type = "scatter", mode = "markers", showlegend = T) %>% layout(
+     title = "Specialist Excesses and Shortages 7 March:26 May 2022 (All-in)",
+     yaxis = list(title = "",
+     categoryarray = ~explorer_allin$hospital, tickfont = list(size = 8),
+     categoryorder = "array",
+     autorange = "reversed"),
+     xaxis = list(title = "Number of specialists"),
+     legend = list(x = 0.77, y = 0.8)
+     )
+
+fig
+```
+<a href="#top">Return to table of contents</a>
+
+## *Shared 7 March 2022::26 May 2022*
+```{r, fig.cap="Specialist Excesses and Shortages 7 March 2022::26 May 2022 (Shared Admissions Workload). Negative values are shortages, and positive values are excesses, relative to the median of the corresponding hospital type. Calculation of the value for each hospital is by deducting the median standardised workload (of the respective type of facility) from a hospital's current standardised workload. The number in shortage/excess is then derived for that hospital's current workload. ", out.extra="class=external",  fig.width=8, fig.height=8, message=FALSE, echo=FALSE, warning=FALSE}
+#### ALL-IN change
+fig <- explorer_shared
+
+fig <- fig %>% plot_ly(x = ~spec_adequacy, y = ~hospital, colors = ~type, symbol = ~date, type = "scatter", mode = "markers", showlegend = T) %>% layout(
+     title = "Specialist Excesses and Shortages 7 March:26 May 2022 (Shared)",
+     yaxis = list(title = "",
+     categoryarray = ~explorer_shared$hospital, tickfont = list(size = 8),
+     categoryorder = "array",
+     autorange = "reversed"),
+     xaxis = list(title = "Number of specialists"),
+     legend = list(x = 0.77, y = 0.8)
+     )
+
+fig
 ```
 <a href="#top">Return to table of contents</a>

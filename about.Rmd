@@ -53,28 +53,31 @@ hosp2019$hospital <- factor(hosp2019$hospital,
 
 dataallin <- arrange(hosp2019, type, desc(spec_n_per_1000_adm))
 ```
-# Data table: Shared general medical workload
+# Data table: Shared admissions workload
 ```{r, results='asis', message=FALSE}
 knitr::kable(datashare[1:55,], caption = "Data table: Shared general medical workload.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
-  row_spec(15:40, color = "salmon") %>% 
-  row_spec(41:55, color = "grey") %>% 
-  kable_styling(position = "float_left", font_size = 10)
+  row_spec(15:41, color = "salmon") %>% 
+  row_spec(42:55, color = "grey") %>% 
+  kable_styling(position = "float_left", font_size = 10) %>% 
+  footnote( "Figures are by latest data.")
 
 #pander(hosp2019, justify = "center")
 ```
 <a href="#top">Return to table of contents</a>
 
+
 ***
 
 
-# Data table: All in
+# Data table: All-in
 ```{r, results='asis', message=FALSE}
 knitr::kable(dataallin[1:55,], caption = "Data table: All in.", align = "c") %>% 
   row_spec(1:14, color = "#150377") %>%
-  row_spec(15:40, color = "salmon") %>% 
-  row_spec(41:55, color = "grey")%>% 
-  kable_styling(position = "float_left", font_size = 10)
+  row_spec(15:41, color = "salmon") %>% 
+  row_spec(42:55, color = "grey")%>% 
+  kable_styling(position = "float_left", font_size = 10) %>% 
+  footnote( "Figures are by latest data.")
 
 #pander(hosp2019, justify = "center")
 ```
